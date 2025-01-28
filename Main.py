@@ -9,7 +9,7 @@ options = Options()
 driver = webdriver.Chrome(options=options)
 
 
-
+#link of the subreddit
 driver.get("https://www.reddit.com/r/blackops6/search/?q=+&type=media&cId=9eb476fd-2f24-4726-83aa-a577343d949c&iId=488456f0-ad50-421a-afd5-8e11b19a590b&t=week&sort=top")
 time.sleep(1)  # Let the page load. In real code, prefer WebDriverWait over sleep.
 post_links = []
@@ -17,11 +17,11 @@ titles = []
 video_sources = []
 
 def get_videos_and_titles():
-    # 1) Scroll so the posts are loaded
+    #Scroll so the posts are loaded
     driver.execute_script("window.scrollTo(0, 1800)")
     time.sleep(5)
 
-    # 2)Collect "post links" or "detail page" URLs
+    #Collect URLS of posts
 
     posts = driver.find_elements(By.TAG_NAME, 'source')
 
@@ -36,13 +36,13 @@ def get_videos_and_titles():
             except:
                 pass
 
-    # 3)iterate over the stored URLs
+    #iterate over URLs
     for post_url in post_links:
         # Navigate directly to the post’s page
         driver.get(post_url)
         time.sleep(2)
 
-        # 4) Grab the title
+        #Grab the title
         try:
             title_element = driver.find_element(By.TAG_NAME, 'h1')
             title = title_element.text
@@ -51,7 +51,7 @@ def get_videos_and_titles():
             title = "(No title found)"
             titles.append("title not found")
 
-        # 5) Find the <shreddit-player-2> and shadow-root <video>
+        #get the video
         try:
             shadow_host = driver.find_element(By.CSS_SELECTOR, "shreddit-player-2")
             shadow_root = driver.execute_script("return arguments[0].shadowRoot", shadow_host)
